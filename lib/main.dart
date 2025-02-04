@@ -17,10 +17,12 @@ import 'package:recyclify/services/auth_service.dart';
 import 'package:recyclify/services/navigation_service.dart';
 import 'package:recyclify/utils.dart';
 import 'package:recyclify/pages/splash_screen.dart'; // Import the SplashScreen
+import 'package:geolocator/geolocator.dart'; // ✅ Added import for location
 
 ThemeMode globalThemeModeVar = ThemeMode.light;
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await setup();
   runApp(
     MyApp(),
@@ -28,9 +30,16 @@ void main() async {
 }
 
 Future<void> setup() async {
-  WidgetsFlutterBinding.ensureInitialized();
   await setupFirebase();
   await registerServices();
+  await requestLocationPermission(); // ✅ Request location permission at startup
+}
+
+Future<void> requestLocationPermission() async {
+  LocationPermission permission = await Geolocator.checkPermission();
+  if (permission == LocationPermission.denied) {
+    permission = await Geolocator.requestPermission();
+  }
 }
 
 class MyApp extends StatefulWidget {

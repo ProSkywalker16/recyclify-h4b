@@ -36,178 +36,105 @@ class ConfirmationPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Confirmation'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            // Device Specifications Table
-            Table(
-              border: TableBorder.all(),
-              children: [
-                const TableRow(children: [
-                  Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text('Device Type:'),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text('Laptop'),
-                  ),
-                ]),
-                TableRow(children: [
-                  const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text('RAM'),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(selectedRAM ?? 'N/A'),
-                  ),
-                ]),
-                TableRow(children: [
-                  const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text('Age of the device'),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(age),
-                  ),
-                ]),
-                TableRow(children: [
-                  const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text('SSD'),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(selectedSSD ?? 'N/A'),
-                  ),
-                ]),
-                TableRow(children: [
-                  const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text('HDD'),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(selectedHDD ?? 'N/A'),
-                  ),
-                ]),
-                TableRow(children: [
-                  const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text('GPU'),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(selectedGPU ?? 'N/A'),
-                  ),
-                ]),
-                TableRow(children: [
-                  const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text('Warranty'),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(selectedWarranty ?? 'N/A'),
-                  ),
-                ]),
-                TableRow(children: [
-                  const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text('Operating System'),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(selectedOS ?? 'N/A'),
-                  ),
-                ]),
-                TableRow(children: [
-                  const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text('Working condition'),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(selectedworkingCondition ?? 'N/A'),
-                  ),
-                ]),
-                TableRow(children: [
-                  const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text('Battery Condition'),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(batteryCondition ?? 'N/A'),
-                  ),
-                ]),
-              ],
-            ),
-
-            const SizedBox(height: 20),
-            
-            // Map Section
-            const Text(
-              'Nearby Stores Offering Exchange/Sell Options:',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: Colors.blue,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              // Device Specifications Table
+              Table(
+                border: TableBorder.all(),
+                children: [
+                  _buildTableRow('Device Type', 'Laptop'),
+                  _buildTableRow('RAM', selectedRAM ?? 'N/A'),
+                  _buildTableRow('Age of the device', age),
+                  _buildTableRow('SSD', selectedSSD ?? 'N/A'),
+                  _buildTableRow('HDD', selectedHDD ?? 'N/A'),
+                  _buildTableRow('GPU', selectedGPU ?? 'N/A'),
+                  _buildTableRow('Warranty', selectedWarranty ?? 'N/A'),
+                  _buildTableRow('Operating System', selectedOS ?? 'N/A'),
+                  _buildTableRow('Working Condition', selectedworkingCondition ?? 'N/A'),
+                  _buildTableRow('Battery Condition', batteryCondition ?? 'N/A'),
+                ],
               ),
-            ),
-            const SizedBox(height: 10),
-            
-            // Map Widget
-            Expanded(
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: const NearbyStoresMap(),
-              ),
-            ),
+              const SizedBox(height: 20),
 
-            const SizedBox(height: 20),
-            
-            // Confirm Button
-            ElevatedButton(
-              onPressed: () async {
-                await databaseService.storeDeviceData(
-                  selectedRAM: selectedRAM,
-                  selectedSSD: selectedSSD,
-                  selectedHDD: selectedHDD,
-                  selectedGPU: selectedGPU,
-                  selectedWarranty: selectedWarranty,
-                  selectedOS: selectedOS,
-                  selectedworkingCondition: selectedworkingCondition,
-                  age: age,
-                  batteryCondition: batteryCondition,
-                );
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Device data stored successfully'),
-                    duration: Duration(seconds: 2),
-                  ),
-                );
-              },
-              style: ElevatedButton.styleFrom(
-                foregroundColor: Colors.white,
-                backgroundColor: Colors.blue,
-                padding: const EdgeInsets.symmetric(vertical: 15),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
+              // Map Section
+              const Text(
+                'Nearby Stores Offering Exchange/Sell Options:',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.blue,
                 ),
               ),
-              child: const Text(
-                'Confirm',
-                style: TextStyle(fontSize: 16),
+              const SizedBox(height: 10),
+
+              // Use SizedBox to ensure map does not take full space
+              SizedBox(
+                height: 250,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: const NearbyStoresMap(),
+                ),
               ),
-            ),
-          ],
+
+              const SizedBox(height: 20),
+
+              // Confirm Button
+              ElevatedButton(
+                onPressed: () async {
+                  await databaseService.storeDeviceData(
+                    selectedRAM: selectedRAM,
+                    selectedSSD: selectedSSD,
+                    selectedHDD: selectedHDD,
+                    selectedGPU: selectedGPU,
+                    selectedWarranty: selectedWarranty,
+                    selectedOS: selectedOS,
+                    selectedworkingCondition: selectedworkingCondition,
+                    age: age,
+                    batteryCondition: batteryCondition,
+                  );
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Device data stored successfully'),
+                      duration: Duration(seconds: 2),
+                    ),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: Colors.white,
+                  backgroundColor: Colors.blue,
+                  padding: const EdgeInsets.symmetric(vertical: 15),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                child: const Text(
+                  'Confirm',
+                  style: TextStyle(fontSize: 16),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
+    );
+  }
+
+  TableRow _buildTableRow(String title, String value) {
+    return TableRow(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(value),
+        ),
+      ],
     );
   }
 }
